@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ko" lang="ko">
+<head>
+  <title>Javascript 二维码生成库：QRCode</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no" />
+  <script type="text/javascript" src="http://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+  <script type="text/javascript" src="http://static.runoob.com/assets/qrcode/qrcode.min.js"></script>
+  <style type="text/css">
+    body {
+      margin: auto; 
+    }
+    .qrcode{
+        left: 700px;
+        top: 200px;
+        width: 350px;
+        height: 350px;
+        margin-top: 20px; 
+    }
+    .input1 {
+      width: 100%;
+      margin: 10px 0px;
+    }
+  </style>
+</head>
+<body>
+  <input id="text" type="text" value="http://www.baidu.com" class="input1"/><br/>
+  <div id="qrcode"></div>
+  <script type="text/javascript">
+    var qrcode = new QRCode(document.getElementById("qrcode"), {
+      width : 300,
+      height : 300,
+    });
+
+    function makeCode () {
+      var elText = document.getElementById("text");
+
+      if (!elText.value) {
+        alert("Input a text");
+        elText.focus();
+        return;
+      }
+
+      qrcode.makeCode(elText.value);
+    }
+
+    makeCode();
+
+    $("#text").
+    on("blur", function () {
+      makeCode();
+    }).
+    on("keydown", function (e) {
+      if (e.keyCode == 13) {
+        makeCode();
+      }
+    });
+  </script>
+</body>
+</html>

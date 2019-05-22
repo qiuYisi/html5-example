@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<title>Show my pictures</title>
+		<style type="text/css">
+			body {
+				margin: auto;
+				padding: 10px;
+				background-image: url("images/bg_image.jpg");
+				background-size: cover;
+			}
+			body h1 {
+				border-bottom: 3px dotted #9999ff;
+				padding-bottom: 12px;
+			}
+			body p {
+				font-size: 25px;
+				font-weight: bold;
+				color: #9999ff;
+				text-shadow: -2px -2px 2px #0000ff;
+				padding-left: 15px;
+			}
+			a {
+				text-decoration: none;
+				color: #000033;
+				background-color: transparent;
+			}
+			ul {
+				padding: 0px;
+			}
+			li{
+				float: left;
+				padding: 1em;
+				line-height: 1.5em;
+				font-size: 20px;
+				font-weight: bold;
+				list-style: none;
+			}
+			img {
+				display: block;
+				clear: both;
+			}
+		</style>
+</head>
+<body>
+	<h1>Show my images</h1>
+		<ul id="imagegallery">
+			<li>
+				<a href="images/longmao.jpg" title="Totoro" onclick="showPic(this); return false;">Totoro</a>
+			</li>
+			<li>
+				<a href="images/monv.jpg" title="Kiki's Delivery Service" onclick="showPic(this); return false;">Kiki</a>
+			</li>
+			<li>
+				<a href="images/yidongchengbao.jpg" title="Hal's Mobile Castle" onclick="showPic(this); return false;">Castle</a>
+			</li>
+			<li>
+				<a href="images/jinyvji.jpg" title="Goldfish Gill on Cliff" onclick="showPic(this); return false;">Goldfish</a>
+			</li>
+		</ul>
+	<script src="scripts/showPic.js"></script>
+</body>
+</html>

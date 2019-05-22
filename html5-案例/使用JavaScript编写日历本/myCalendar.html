@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+</html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>日历</title>
+
+    <style type="text/css">
+        body {
+          margin: auto;
+          background-image: url("images/bg_image.jpg");
+           background-size: cover;
+        }
+        h2 {
+          margin: 10px 0px;
+          color: #ff6600;
+          text-align: center;
+          text-shadow: -1px -1px #ffffff, 2px 2px #993300;
+          font-family: "楷体";
+       }
+        #myCalendar { 
+          margin: auto;
+          top: 200px;
+          left: 800px; 
+          width: 230px; 
+          padding: 1px; 
+          font-weight: bold;
+          font-family: '楷体';
+          cursor: pointer;
+          background-color: #ffff66;
+          box-shadow: 4px 4px 3px #cc9900;
+          border-radius: 5px;
+        }
+        .all_font { 
+            font: 10pt;  
+        }
+        .week, .BlankTd { 
+            font: 12pt; 
+            border: 1px solid menu; 
+        }
+        .today {
+          font-family: : 20pt; 
+          color: #ff6600; 
+          position: relative;
+          border-left: 1px solid #ffffff; 
+          border-top: 1px solid #ffffff; 
+          border-right: 1px solid #ff6600; 
+          border-bottom: 1px solid #ff6600;  
+        }
+        .month { 
+          font: 10pt; 
+          font-family: webdings;
+          border: 1px solid menu;       
+        }
+        .select { 
+          border: 1px solid menu; 
+        }
+        .over {
+          position: relative; 
+          border-right: 1px solid buttonshadow; 
+          border-bottom: 1px solid buttonshadow; 
+          border-left: 1px solid buttonhighlight; 
+          border-top: 1px solid buttonhighlight; 
+        }
+        .out { 
+          border-left: 1px solid buttonface; 
+          border-top: 1px solid buttonface; 
+          border-right: 1px solid buttonface; 
+          border-bottom: 1px solid buttonface; 
+        }
+        .down {     
+          position: relative; 
+          left: 1px; 
+          top: 1px; 
+          border-left: 1px solid dimgray; 
+          border-top: 1px solid dimgray; 
+          border-right: 1px solid white; 
+          border-bottom: 1px solid white; 
+        }
+      </style>
+  <script type="text/javascript" language="javascript">
+          var oDate = new Object();
+          function DateClass(_container) {
+       
+          this.container = _container;
+          this.weekArr = ['日', '一', '二', '三', '四', '五', '六'];
+          this.dateArr = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+
+          this.showTable = function(_year, _month) {
+              this.container.innerHTML = this.getDateTable(_year, _month);
+          }
+
+          this.getDateTable = function(_year, _month) {
+              if (this.checkArgs(_year, _month)) {
+                  _year = parseInt(this.checkDate(_year, _month).split('-')[0]);
+                  _month = parseInt(this.checkDate(_year, _month).split('-')[1]);
+                  this.Thead = '<table cellpadding="5" cellspacing="0" class="all_font">\n';
+                  //左边的控件，点击跳转到上一个月。
+                  this.Thead += '<tr><td align="center" class="month" onclick="oDate.showTable(' + _year + ', ' + eval(_month-1) + ');">3</td>';
+                  //下拉选择年份。
+                  this.Thead += '<td align="center" colspan="5" class="select"><select onchange="oDate.showTable(options[selectedIndex].value, ' + _month + ');">';
+                  for (var i=1900; i<2101; i++) this.Thead += '<option value="' + i + '" ' + ((_year==i) ? 'selected' : '') + '>' + i + '年</option>';
+                  this.Thead += '</select><select onchange="oDate.showTable(' + _year + ', options[selectedIndex].value);">';
+                  //下拉选择月份。
+                  for (var i=1; i<13; i++) this.Thead += '<option value="' + i + '" ' + ((_month==i) ? 'selected' : '') + '>' + i + '月</option>';
+                  this.Thead += '</select></td>';
+                   //右边控件，点击跳转到下一个月。
+                   this.Thead += '<td align="center" class="month" onclick="oDate.showTable(' + _year + ', ' + eval(_month+1) + ');">4</td></tr>\n';
+                   //显示一周七天的间隔。
+                   this.Thead += '<tr>';
+                   for (var i=0; i<this.weekArr.length; i++) this.Thead += '<td align="center" class="week">' + this.weekArr[i] + '</td>';
+                   this.Thead += '</tr>\n';
+                   this.Tbody = '<tr>';
+                   //判断2月是否有29号。
+                   this.dateArr[1] = (!this.checkYear(_year)) ? 28 : 29 ;
+                   //每月第一天的位置。
+                   for (var i=0; i<this.firstPos(_year, _month); i++) this.Tbody += '<td class="BlankTd"></td>';
+                  //设定日历上的排列。
+                   for (var i=1; i<=this.dateArr[_month-1]; i++) {
+                        if (this.firstPos(_year, _month) == 0) {
+                            if (i!=1 && i%7==1) this.Tbody += '</tr>\n<tr>';
+                        } else {
+                            if ((i+this.firstPos(_year, _month))%7==1) this.Tbody += '</tr>\n<tr>';
+                        }
+                        if (!this.today(_year, _month, i)) {
+                            this.Tbody += '<td align="center" class="out" onmouseover="className=\'over\';" onmouseout="className=\'out\';" onmousedown="className=\'down\';" onclick="oDate.showDateStr(' + _year + ', ' + _month + ', ' + i + ', \'' + this.weekArr[new Date(_year, _month-1, i).getDay()] + '\');">' + i + '</td>';
+                        } else {
+                           this.Tbody += '<td align="center" class="today" onclick="oDate.showDateStr(' + _year + ', ' + _month + ', ' + i + ', \'' + this.weekArr[new Date(_year, _month-1, i).getDay()] + '\');">' + i + '</td>'; 
+                        } 
+                   }
+                   for (var i=0; i<6-this.lastPos(_year, _month); i++) this.Tbody += '<td class="BlankTd"></td>';
+                   this.Tbody += '</tr>\n'; 
+                   this.TFoot = '</table>\n';
+                   this.Table = this.Thead + this.Tbody + this.TFoot;
+                   return this.Table;
+               } else {
+                   return 'Arguments Error!';
+               }            
+           }
+           //设置第一个位置。
+           this.firstPos = function(_year, _month) {
+                return new Date(_year, _month-1, 1).getDay();
+           }
+           //设置最后一个位置。
+           this.lastPos = function(_year, _month) {
+                return new Date(_year, _month-1, this.dateArr[_month-1]).getDay();
+           }
+          //检查年份是否为闰年。
+           this.checkYear = function(_year) {
+                return ((_year % 4 == 0) && (_year % 100 != 0)) || (_year % 400 == 0);
+           }
+           //设置今天的日期。
+           this.today = function(_year, _month, _date) {
+                return (new Date().getFullYear() == _year) && (new Date().getMonth() == _month-1) && (new Date().getDate() == _date);
+           }
+           //设定年份和月份的范围。
+           this.checkArgs = function(_year, _month) {
+                if (_year<1900 || _year>2100) return false;
+                if (_month<0 || _month>13) return false;
+                return (!isNaN(_year) && !isNaN(_month));           
+           }
+           //检查日期的正确性。
+           this.checkDate = function(_year, _month) {
+                if (_month<1) { 
+                    _year --;
+                    _month = 12;
+                }
+                if (_month>12) { 
+                    _year ++;
+                    _month = 1;
+                }
+                return _year + '-' + _month;
+           } 
+          //设置弹窗信息。
+           this.showDateStr = function(_year, _month, _date, _week) {
+                window.alert(_year + '年' + _month + '月' + _date + '日' + ' 星期'+_week);  
+           }
+      }
+     //读取年月日等信息。
+      window.onload = function() {
+           oDate = new DateClass(self.myCalendar);
+           oDate.showTable(new Date().getFullYear(), new Date().getMonth()+1);
+      }
+  </script>
+</head>
+<body>
+  <h2>我的日历本</h2>
+  <div id="myCalendar"></div>
+</body>
+</html>
